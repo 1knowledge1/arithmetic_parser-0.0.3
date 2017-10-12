@@ -1,56 +1,129 @@
 #include <iostream>
-#include <sstream>
 
 using namespace std;
 
+float sum(float a, char c, float b)
+
+{
+    float k;
+    switch (c)
+
+    {
+        case '+':
+        {
+            return k = a+b;
+            break;
+        }
+
+        case '-':
+        {
+            return k = a-b;
+            break;
+
+        }
+        case '*':
+        {
+            return k = a*b;
+            break;
+        }
+
+        case '/':
+        {
+            if (b==0)
+            {
+                cout << "Can not divide by 0!";
+                exit (0);
+            }
+
+            else
+            {
+                return k = a/b;
+                break;
+            }
+        }
+
+        default:
+        {
+            cout << "Incorrect input!";
+            exit (0);
+        }
+    }
+};
+
 int main()
 {
-	string string; 
-	getline(cin, string);
-	istringstream stream(string);
-	int n = 0;
-	float res;
 
-	float *num = new float[n];
-	char *sgn = new char[n];
-	
-	for (; stream >> num[n]; n++) if (!(stream >> sgn[n])) break;
-	
-	for (int i = 0; i < n; i++) {
-		
-		if (sgn[i] == '*') 
-		{
-			num[i] = num[i] * num[i+1];
-			
-			for (int j = i; j <(n-1); j++) {
-				sgn[j] = sgn[j+1];
-				num[j+1] = num[j+2];
-			} 
-			sgn[n - 1] = '+'; num[n] = 0.0; i--;
-		}
+    short i;
+    float a[3], k;
+    char op[2], op1='r';
 
-		if (sgn[i] == '/')
-		{	
-			if (num[i + 1] == 0) {
-				cout << "Can not divide by 0\n";
-				return 0;
-			}
-			num[i] = num[i] / num[i + 1];
+    cin >> a[0];
+    cin.get(op1);
 
-			for (int j = i; j <(n - 1); j++) {
-				sgn[j] = sgn[j + 1];
-				num[j + 1] = num[j + 2];
-			}
-			sgn[n - 1] = '+'; num[n] = 0.0; i--;
-		}
+    if (op1 == '\n')
+    {
+        cout << a[0];
+        exit (0);
+    }
 
-	}
-	res = num[0];
-	for (int i = 0; i <= n; i++) {
-		if (sgn[i] == '+') res = res + num[i+1];
-		if (sgn[i] == '-') res = res - num[i+1];
-	}
-	cout << res << endl;
+    cin.get(op[0]);
+
+    sum (0, op[0], 1);
+
+    cin.get(op1);
+    cin >> a[1];
+    cin.get(op1);
+
+    if (op1 == '\n')
+    {
+        a[0] = sum (a[0], op[0], a[1]);
+        cout << a[0];
+        exit (0);
+    }
+
+    while (op1 != '\n')
+    {
+        i=0;
+        cin.get(op[1]);
+
+        sum (0, op[1], 1);
+
+        cin.get(op1);
+        cin >> a[2];
+
+        if ( ( ( (op[0] == '+') || (op[0] == '-') ) && ( (op[1] == '+') || (op[1] == '-') ) ) || ( ( (op[0] == '*') || (op[0] == '/') ) && ( (op[1] == '*') || (op[1] == '/') ) ) )
+        {
+            a[0] = sum (a[0], op[0], a[1]);
+            k = a[0];
+            a[1]=a[2];
+            op[0]=op[1];
+            cin.get(op1);
+            continue;
+        }
+
+        if ( ( (op[0] == '+') || (op[0] == '-') ) && ( (op[1] == '*') || (op[1] == '/') ) )
+        {
+            a[1] = sum (a[1], op[1], a[2]);
+            k = a[1];
+            i=1;
+            cin.get(op1);
+            continue;
+        }
+
+        if ( ( (op[0] == '*') || (op[0] == '/') ) && ( (op[1] == '+') || (op[1] == '-') ) )
+        {
+            a[0] = sum (a[0], op[0], a[1]);
+            k = a[0];
+            a[1] = a[2];
+            op[0] = op [1];
+            cin.get(op1);
+            continue;
+        }
+    }
+
+    if (i == 1) k = sum (a[0], op[0], k); else k = sum (k, op[1], a[1]);
+
+    cout << k;
 
     return 0;
 }
